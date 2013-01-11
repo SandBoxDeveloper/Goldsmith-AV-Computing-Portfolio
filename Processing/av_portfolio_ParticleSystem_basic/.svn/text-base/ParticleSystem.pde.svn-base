@@ -1,0 +1,61 @@
+
+// keep track of the current time
+float t = 0;
+
+// The particles of the particle system are stored in an 
+// ArrayList, which makes it easier to add and remove them 
+// than a normal array
+ArrayList particles;
+
+
+// global parameters
+float gravity = 4;
+
+
+void setup()
+{
+  size(640, 480);
+  particles = new ArrayList();
+}
+
+// adds a new particle to the particle system and 
+// sets it's parameters
+void addParticle()
+{
+    Particle newParticle = new Particle();
+    newParticle.position = new PVector(width/2, height);
+    newParticle.velocity = new PVector(0, -30);
+    newParticle.size = 3;
+    particles.add(newParticle); 
+}
+
+void draw()
+{
+  background(255);
+  
+   // the change in time since last frame
+   float newTime   = millis()/1000.0;
+   float deltaTime = newTime - t;
+   t = newTime;
+  
+   // go through each particle in turn updating and drawing it. 
+   // at the end we check if alive has been set to false, if so 
+   // we remove the particle
+   // Notice how we are looping through the ArrayList backwards, this 
+   // is because we are deleting elements from the list
+   for (int i = particles.size()-1; i >= 0; i--) { 
+    // An ArrayList doesn't know what it is storing so we have 
+    // to cast the object coming out
+    Particle p = (Particle) particles.get(i);
+    p.update(deltaTime);
+    p.draw();
+    if (!p.alive) {
+      // Items can be deleted with remove()
+      particles.remove(i);
+    }
+    
+  } 
+  
+  
+   addParticle();
+}
